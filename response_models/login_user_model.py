@@ -6,7 +6,7 @@ class User(BaseModel):
     name: str
 
 
-class RegisterUser(BaseModel):
+class LoginUser(BaseModel):
     success: bool
     status_code: int
     message: str | None = None

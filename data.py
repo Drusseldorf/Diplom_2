@@ -7,3 +7,4 @@ class UserMessage:
 
     ALREADY_EXISTS = 'User already exists'
     MISSING_MANDATORY_FIELD = 'Email, password and name are required fields'
+    WRONG_CREDS = 'email or password are incorrect'
