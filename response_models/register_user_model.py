@@ -8,6 +8,7 @@ class User(BaseModel):
 
 class RegisterUser(BaseModel):
     success: bool
+    status_code: int
     message: str = ''
     user: User = None
     accessToken: str = ''

@@ -17,11 +17,14 @@ class User:
         response = r.post(cls.REGISTER_URL, json=kwargs, headers=cls.HEADERS)
 
         try:
-            response_model = RegisterUser.model_validate_json(response.text)
+            response_model = RegisterUser.model_validate({
+                **response.json(),
+                "status_code": response.status_code
+            })
         except ValidationError as e:
-            response_model = RegisterUser(success=False, message=e.json())
+            response_model = RegisterUser(success=False, message=e.json(), status_code=response.status_code)
         except ValueError as e:
-            response_model = RegisterUser(success=False, message=str(e))
+            response_model = RegisterUser(success=False, message=str(e), status_code=response.status_code)
 
         return response_model
 
