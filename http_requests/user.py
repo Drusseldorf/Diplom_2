@@ -1,9 +1,8 @@
 from pydantic import ValidationError
 import requests as r
-import json
 
 from data import Url
-from response_models.register_user_model import RegisterUserSuccess, RegisterUserFail
+from response_models.register_user_model import RegisterUser
 
 
 class User:
@@ -15,13 +14,14 @@ class User:
     @classmethod
     def register(cls, **kwargs):
 
-        data = json.dumps({key: value for key, value in kwargs.items()})
-        response = r.post(cls.REGISTER_URL, data, headers=cls.HEADERS)
+        response = r.post(cls.REGISTER_URL, json=kwargs, headers=cls.HEADERS)
 
         try:
-            response_model = RegisterUserSuccess.model_validate_json(response.text)
-        except ValidationError:
-            response_model = RegisterUserFail.model_validate_json(response.text)
+            response_model = RegisterUser.model_validate_json(response.text)
+        except ValidationError as e:
+            response_model = RegisterUser(success=False, message=e.json())
+        except ValueError as e:
+            response_model = RegisterUser(success=False, message=str(e))
 
         return response_model
 

@@ -1,18 +1,14 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 
 class User(BaseModel):
-    email: str
+    email: EmailStr
     name: str
 
 
-class RegisterUserSuccess(BaseModel):
+class RegisterUser(BaseModel):
     success: bool
-    user: User
-    accessToken: str
-    refreshToken: str
-
-
-class RegisterUserFail(BaseModel):
-    success: bool
-    message: str
+    message: str = ''
+    user: User = None
+    accessToken: str = ''
+    refreshToken: str = ''
