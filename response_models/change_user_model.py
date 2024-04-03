@@ -10,4 +10,4 @@ class ChangeUser(BaseModel):
     success: bool
     status_code: int
     message: str | None = None
-    user: User = None
+    user: User | None = None

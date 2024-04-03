@@ -31,18 +31,18 @@ class User:
         return Validate.get_model_response(LoginUser, response)
 
     @classmethod
-    def change(cls, accessToken, **kwargs):
+    def change(cls, access_token, **kwargs):
 
-        headers = {'Authorization': accessToken}
+        headers = {'Authorization': access_token}
 
         response = r.patch(cls.CHANGE_USER_DATA_URL, json=kwargs, headers=headers)
 
         return Validate.get_model_response(ChangeUser, response)
 
     @classmethod
-    def delete(cls, accessToken):
+    def delete(cls, access_token):
 
-        headers = {'Authorization': accessToken}
+        headers = {'Authorization': access_token}
 
         response = r.delete(cls.DELETE_URL, headers=headers)
 
