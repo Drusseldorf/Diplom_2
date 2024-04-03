@@ -16,11 +16,11 @@ class Generate:
         }
 
     @staticmethod
-    def name(cls):
+    def name():
         return Faker().name()
 
     @staticmethod
-    def email(cls):
+    def email():
         return Faker().email()
 
     @classmethod
@@ -43,8 +43,12 @@ class Validate:
                 "status_code": response.status_code
             })
         except ValidationError as e:
-            response_model = model(success=False, message=f'Validation Error: {str(e)}', status_code=response.status_code)
+            response_model = model(success=False,
+                                   message=f'Validation Error: {str(e)}',
+                                   status_code=response.status_code)
         except json.JSONDecodeError:
-            response_model = model(success=False, message=f'Not a valid JSON: {response.text}', status_code=response.status_code)
+            response_model = model(success=False,
+                                   message=f'Not a valid JSON: {response.text}',
+                                   status_code=response.status_code)
 
         return response_model
