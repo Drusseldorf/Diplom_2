@@ -1,20 +1,23 @@
 import pytest
 
 from http_requests.user import User
-from data import UserMessage
 from helpers import Generate
 
 
 class TestChangeUser:
-    pass
 
-# сохранить параметризацию. Разобраться как все же это сделать через генератор
-# @pytest.mark.parametrize('new_user_data', [({'email': Generate.email()}),
-#                                            ({'name': Generate.name()})])
-# def test_change_user_authorized(self, register_user, new_user_data):
-#
-#     response = User.change(register_user.accessToken, **new_user_data)
-#
-#     assert response.success \
-#            and response.user.email == Generate.get_last_generated_email() \
-#            and response.user.name == Generate.get_last_generated_name()
+    @pytest.mark.parametrize('new_data, authorized', [
+        ({'email': Generate.email()}, True),
+        ({'name': Generate.name()}, True),
+        ({'password': Generate.password()}, True),
+        ({'email': Generate.email()}, False),
+        ({'name': Generate.name()}, False),
+        ({'password': Generate.password()}, False),
+    ])
+    def test_change_user_data(self, register_user, new_data, authorized):
+
+        token = register_user.accessToken if authorized else 'invalid_token'
+
+        response = User.change(token, **new_data)
+
+        assert response.success == authorized

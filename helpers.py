@@ -1,17 +1,11 @@
 from faker import Faker
 from pydantic import ValidationError
+import json
 
 
 class Generate:
 
     last_generated_password = None
-    last_generated_email = None
-    last_generated_name = None
-
-    @classmethod
-    def name(cls):
-        cls.last_generated_name = Faker().name()
-        return cls.last_generated_name
 
     @classmethod
     def full_creds(cls):
@@ -22,9 +16,12 @@ class Generate:
         }
 
     @classmethod
+    def name(cls):
+        return Faker().name()
+
+    @classmethod
     def email(cls):
-        cls.last_generated_email = Faker().email()
-        return cls.last_generated_email
+        return Faker().email()
 
     @classmethod
     def password(cls):
@@ -35,28 +32,19 @@ class Generate:
     def get_last_generated_password(cls):
         return cls.last_generated_password
 
-    @classmethod
-    def get_last_generated_email(cls):
-        return cls.last_generated_email
-
-    @classmethod
-    def get_last_generated_name(cls):
-        return cls.last_generated_name
-
 
 class Validate:
 
     @staticmethod
     def get_model_response(model, response):
-
         try:
             response_model = model.model_validate({
                 **response.json(),
                 "status_code": response.status_code
             })
         except ValidationError as e:
-            response_model = model(success=False, message=e.json(), status_code=response.status_code)
-        except ValueError as e:
-            response_model = model(success=False, message=str(e), status_code=response.status_code)
+            response_model = model(success=False, message=f'Validation Error: {str(e)}', status_code=response.status_code)
+        except json.JSONDecodeError:
+            response_model = model(success=False, message=f'Not a valid JSON: {response.text}', status_code=response.status_code)
 
         return response_model
