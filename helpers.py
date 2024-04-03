@@ -15,11 +15,11 @@ class Generate:
             'name': cls.name()
         }
 
-    @classmethod
+    @staticmethod
     def name(cls):
         return Faker().name()
 
-    @classmethod
+    @staticmethod
     def email(cls):
         return Faker().email()
 
