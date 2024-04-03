@@ -15,7 +15,7 @@ class TestMakeOrder:
     ])
     def test_make_order(self, register_user, ingredients, authorized, expected_result):
 
-        token = register_user.accessToken if authorized else 'invalid_token'
+        token = register_user.accessToken if authorized else None
 
         response = Order.create(token, **ingredients)
 

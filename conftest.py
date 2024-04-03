@@ -8,9 +8,9 @@ from http_requests.user import User
 def register_user():
 
     response = User.register(**Generate.full_creds())
-    accessToken = response.accessToken
+    access_token = response.accessToken
 
     yield response
 
-    if accessToken:
-        User.delete(accessToken)
+    if access_token:
+        User.delete(access_token)
