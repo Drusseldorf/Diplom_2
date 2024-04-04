@@ -42,6 +42,3 @@ class MakeOrder(BaseModel):
     name: str | None = None
     order: Order | None = None
     status_code: int
-
-
-

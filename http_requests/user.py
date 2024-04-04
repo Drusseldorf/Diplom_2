@@ -1,3 +1,4 @@
+import allure
 import requests as r
 
 from data import Url
@@ -17,6 +18,7 @@ class User:
     HEADERS = {'Content-Type': 'application/json'}
 
     @classmethod
+    @allure.step('Регистрация пользователя')
     def register(cls, **kwargs):
 
         response = r.post(cls.REGISTER_URL, json=kwargs, headers=cls.HEADERS)
@@ -24,6 +26,7 @@ class User:
         return Validate.get_model_response(RegisterUser, response)
 
     @classmethod
+    @allure.step('Логин пользователя')
     def login(cls, **kwargs):
 
         response = r.post(cls.LOGIN_URL, json=kwargs, headers=cls.HEADERS)
@@ -31,15 +34,20 @@ class User:
         return Validate.get_model_response(LoginUser, response)
 
     @classmethod
-    def change(cls, access_token, **kwargs):
+    @allure.step('Изменение данных пользователя')
+    def change(cls, access_token=None, **kwargs):
 
-        headers = {'Authorization': access_token}
+        headers = cls.HEADERS.copy()
+
+        if access_token:
+            headers.update({'Authorization': access_token})
 
         response = r.patch(cls.CHANGE_USER_DATA_URL, json=kwargs, headers=headers)
 
         return Validate.get_model_response(ChangeUser, response)
 
     @classmethod
+    @allure.step('Удаление пользователя')
     def delete(cls, access_token):
 
         headers = {'Authorization': access_token}
