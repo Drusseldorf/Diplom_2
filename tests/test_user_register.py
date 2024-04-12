@@ -10,7 +10,9 @@ from helpers import Generate
 class TestRegisterUser:
 
     @allure.title('Тест регистрации пользователя')
-    def test_register_unique_user(self, register_user):
+    def test_register_unique_user(self):
+
+        register_user = User.register(**Generate.full_creds())
 
         assert register_user.success \
                and register_user.status_code == requests.codes.OK \
